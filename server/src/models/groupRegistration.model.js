@@ -13,10 +13,24 @@ const groupRegistrationSchema = new mongoose.Schema(
     // Array of member IDs (references to Registration model)
     members: [
       {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Registration',
+        fullName: String,
+        email: String,
+        mobileNo: String,
+        gender: String,
+        dob: Date,
+        designation: String,
+        institutionOrganization: String,
+        city: String,
+        state: String,
+        medicalCouncilRegNo: String,
+        afpiRegNo: String,
+        heardAboutConference: String,
+        attendedPrevious: Boolean,
+        registrationCategory: String,
+        interestedInWorkshop: Boolean,
       },
     ],
+
 
     // Group Details
     totalMembers: {

@@ -72,13 +72,15 @@ export const groupRegistration = async (req, res) => {
                 ...member,
                 email: member.email.toLowerCase(),
             })),
-            registrationFee: fees.registrationFee,
-            workshopFee: fees.workshopFee,
-            gstAmount: fees.gstAmount,
-            discount: fees.discount,
-            totalAmount: fees.totalAmount,
+            totalMembers: members.length,
+            groupRegistrationFee: fees.registrationFee, 
+            groupWorkshopFee: fees.workshopFee,         
+            groupGstAmount: fees.gstAmount,             
+            groupDiscount: fees.discount,              
+            groupTotalAmount: fees.totalAmount,        
             paymentStatus: 'pending',
         });
+
 
         await groupRegistration.save();
 
