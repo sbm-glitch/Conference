@@ -155,13 +155,20 @@ const registrationSchema = new mongoose.Schema(
 
 // Generate Registration ID before saving
 registrationSchema.pre('save', async function (next) {
-    if (!this.registrationId && this.paymentStatus === 'completed') {
+    // Generate unique ID only if missing
+    if (!this.registrationId) {
         const count = await mongoose.models.Registration.countDocuments();
         this.registrationId = `WFDD2024-${String(count + 1).padStart(6, '0')}`;
+    }
+
+    // Add registration date if payment is completed
+    if (this.paymentStatus === 'completed' && !this.registrationDate) {
         this.registrationDate = new Date();
     }
+
     next();
 });
+
 
 const Registration = mongoose.model('Registration', registrationSchema);
 

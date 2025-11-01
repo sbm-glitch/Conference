@@ -73,16 +73,35 @@ export const groupRegistration = async (req, res) => {
                 email: member.email.toLowerCase(),
             })),
             totalMembers: members.length,
-            groupRegistrationFee: fees.registrationFee, 
-            groupWorkshopFee: fees.workshopFee,         
-            groupGstAmount: fees.gstAmount,             
-            groupDiscount: fees.discount,              
-            groupTotalAmount: fees.totalAmount,        
+            groupRegistrationFee: fees.registrationFee,
+            groupWorkshopFee: fees.workshopFee,
+            groupGstAmount: fees.gstAmount,
+            groupDiscount: fees.discount,
+            groupTotalAmount: fees.totalAmount,
             paymentStatus: 'pending',
         });
 
-
         await groupRegistration.save();
+
+        // ✅ Send confirmation email
+        const htmlContent = `
+      <h2>Group Registration Successful 🎉</h2>
+      <p>Dear Team,</p>
+      <p>Your group registration for the conference has been successfully completed.</p>
+      <p><strong>Group Registration ID:</strong> ${groupRegistration._id}</p>
+      <p><strong>Total Members:</strong> ${members.length}</p>
+      <p><strong>Total Amount:</strong> ₹${fees.totalAmount}</p>
+      <p>Primary Email: ${primaryEmail}</p>
+      <br/>
+      <p>We look forward to seeing your team at the conference!</p>
+      <p>Best regards,<br/>Conference Team</p>
+    `;
+
+        await sendEmail(
+            primaryEmail,
+            "🎉 Group Registration Confirmation - Conference 2025",
+            htmlContent
+        );
 
         return res.status(201).json({
             success: true,

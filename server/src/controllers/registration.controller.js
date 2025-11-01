@@ -1,5 +1,6 @@
 import Registration from '../models/registration.model.js';
 import { calculateFees } from '../utils/feeCalculator.js';
+import { sendEmail } from '../utils/sendEmail.js';
 
 /**
  * Individual Registration
@@ -27,9 +28,9 @@ export const individualRegistration = async (req, res) => {
     } = req.body;
 
     // Validate required fields
-    if (!fullName || !email || !mobileNo || !gender || !dob || !designation || 
-        !institutionOrganization || !city || !state || !heardAboutConference || 
-        attendedPrevious === undefined || !registrationCategory) {
+    if (!fullName || !email || !mobileNo || !gender || !dob || !designation ||
+      !institutionOrganization || !city || !state || !heardAboutConference ||
+      attendedPrevious === undefined || !registrationCategory) {
       return res.status(400).json({
         success: false,
         message: 'All required fields must be provided',
@@ -72,6 +73,21 @@ export const individualRegistration = async (req, res) => {
     });
 
     await registration.save();
+
+    // ✅ Send confirmation email
+    const htmlContent = `
+      <h2>Registration Successful 🎉</h2>
+      <p>Dear ${fullName},</p>
+      <p>Your registration for the conference has been successfully completed.</p>
+      <p><strong>Registration ID:</strong> ${registration._id}</p>
+      <p><strong>Total Amount:</strong> ₹${fees.totalAmount}</p>
+      <p>We look forward to seeing you at the conference!</p>
+      <br/>
+      <p>Best regards,<br/>Conference Team</p>
+    `;
+
+    await sendEmail(email, "🎉 Registration Confirmation - AFPICON WB 2026", htmlContent);
+
 
     return res.status(201).json({
       success: true,
