@@ -1,5 +1,6 @@
 import GroupRegistration from '../models/groupRegistration.model.js';
 import { calculateFees } from '../utils/feeCalculator.js';
+import { sendEmail } from '../utils/sendEmail.js';
 
 /**
  * Group Registration (5 members)
@@ -99,7 +100,7 @@ export const groupRegistration = async (req, res) => {
 
         await sendEmail(
             primaryEmail,
-            "🎉 Group Registration Confirmation - Conference 2025",
+            "🎉 Group Registration Confirmation - AFPICON WB 2026",
             htmlContent
         );
 
